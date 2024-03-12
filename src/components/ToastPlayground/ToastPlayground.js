@@ -2,34 +2,14 @@ import React from 'react';
 
 import Button from '../Button';
 import ToastShelf from '../ToastShelf';
-import Toast from '../Toast';
+import { ToastContext } from '../ToastProvider';
 
 import styles from './ToastPlayground.module.css';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
-  const [message, setMessage] = React.useState('Message');
-  const [variant, setVariant] = React.useState('notice');
-  const [toasts, setToasts] = React.useState([]);
-  const variantRef = React.useRef();
-
-  const createToast = (event) => {
-    event.preventDefault();
-    
-    console.log('creating toast');
-
-    const newToast = {
-      message: message,
-      variant: variant,
-      id: crypto.randomUUID(),
-    };
-
-    setToasts([...toasts, newToast]);
-
-    setMessage('');
-    setVariant('notice');
-  }
+  const { createToast, message, setMessage, variant, setVariant } = React.useContext(ToastContext);
 
   return (
     <div className={styles.wrapper}>
@@ -38,7 +18,7 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <ToastShelf toasts={toasts} setToasts={setToasts} />
+      <ToastShelf />
 
       <div className={styles.controlsWrapper}>
         <form onSubmit={createToast}>
@@ -51,7 +31,7 @@ function ToastPlayground() {
               Message
             </label>
             <div className={styles.inputWrapper}>
-              <textarea id="message" className={styles.messageInput} value={message} onChange={(event) => { setMessage(event.target.value) }} />
+              <textarea id="message" required className={styles.messageInput} value={message} onChange={(event) => { setMessage(event.target.value) }} />
             </div>
           </div>
 
@@ -66,7 +46,6 @@ function ToastPlayground() {
                     id={`variant-${option}`}
                     type="radio"
                     name="variant"
-                    ref={variantRef}
                     value={option}
                     checked={option === variant} // Control the checked attribute based on the state
                     onChange={(event) => { setVariant(event.target.value) }}

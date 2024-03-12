@@ -3,14 +3,10 @@ import React from 'react';
 import Toast from '../Toast';
 import styles from './ToastShelf.module.css';
 
-function ToastShelf({toasts, setToasts}) {
+import { ToastContext } from '../ToastProvider';
 
-  const handleCloseToast = (id) => {
-    const newArray = [...toasts];
-    setToasts([...newArray.filter(item => item.id !== id)]);
-
-    console.log('closing toast');
-  };
+function ToastShelf() {
+  const { toasts, handleCloseToast } = React.useContext(ToastContext);
 
   console.log(toasts);
 
