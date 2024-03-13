@@ -6,10 +6,8 @@ export const ToastContext = React.createContext();
 
 function ToastProvider({children}) {
   const [toasts, setToasts] = React.useState([]);
-  const [message, setMessage] = React.useState('Message');
-  const [variant, setVariant] = React.useState('notice');
 
-  const createToast = (event) => {
+  const createToast = (message, variant) => {
     event.preventDefault();
 
     console.log('creating toast');
@@ -21,28 +19,25 @@ function ToastProvider({children}) {
     }
 
     setToasts([...toasts, newToast]);
-
-    setMessage('');
-    setVariant('notice');
   }
 
-  const handleCloseToast = (id) => {
+  const removeToast = (id) => {
     const newArray = [...toasts];
     setToasts([...newArray.filter(item => item.id !== id)]);
 
     console.log('removing toast');
   }
 
-  const handleCloseAll = () => {
+  const removeAllToats = () => {
     setToasts([]);
 
     console.log('removing all toasts');
   }
 
-  useEscapeKey(handleCloseAll);
+  useEscapeKey(removeAllToats);
 
   return (
-    <ToastContext.Provider value={{ toasts, createToast, handleCloseToast, message, setMessage, variant, setVariant }}> 
+    <ToastContext.Provider value={{ toasts, createToast, removeToast }}> 
       {children}
     </ToastContext.Provider>
   )
