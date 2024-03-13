@@ -16,7 +16,7 @@ function ToastProvider({children}) {
       message: message,
       variant: variant,
       id: crypto.randomUUID(),
-    };
+    }
 
     setToasts([...toasts, newToast]);
 
@@ -29,7 +29,27 @@ function ToastProvider({children}) {
     setToasts([...newArray.filter(item => item.id !== id)]);
 
     console.log('closing toast');
-  };
+  }
+
+  const handleCloseAll = () => {
+    setToasts([]);
+  }
+
+  React.useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.code === 'Escape') {
+        handleCloseAll();
+      }
+    };
+
+    // Add event listener
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup function to remove the event listener
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  })
 
   return (
     <ToastContext.Provider value={{ toasts, createToast, handleCloseToast, message, setMessage, variant, setVariant }}> 
